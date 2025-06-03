@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
 import { AuthContext, AuthProvider } from "./AuthContext";
-import { CardProvider } from "./CardContext";
+import Register from "./components/Register";
 import Login from "./components/Login";
-import Register from "../source/components/Register";
-import CardSearch from "../source/components/CardSearch";
+import CardSearch from "./components/CardSearch";
 import Collection from "./components/Collection";
 import DeckBuilder from "./components/DeckBuilder";
 import Header from "./components/Header";
+import { CardProvider } from "./components/CardContext";
 
 function App() {
   const { user, page, setPage, logout } = useContext(AuthContext);
@@ -38,7 +38,9 @@ function App() {
 export default function Root() {
   return (
     <AuthProvider>
-      <App />
+      <CardProvider>
+        <App />
+      </CardProvider>
     </AuthProvider>
   );
 }

@@ -1,6 +1,6 @@
 // ui/src/components/Collection.jsx
 import React, { useState, useEffect, useContext } from "react";
-import { AuthContext } from "./AuthContext";
+import { AuthContext } from "../AuthContext"
 import { useCardContext } from "./CardContext";
 
 export default function Collection() {

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { AuthContext } from "../../source/AuthContext";
+import { AuthContext } from "../AuthContext";
 
 export default function Register() {
   const { setUser, setPage } = useContext(AuthContext);
