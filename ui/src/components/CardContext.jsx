@@ -25,7 +25,7 @@ export function CardProvider({ children }) {
   }, [user, token]);
 
   // Add to collection
-  async function addToCollection(card) {
+  async function addCardToCollection(card) {
     if (!token) return;
     await fetch("/api/collection", {
       method: "POST",
@@ -64,7 +64,7 @@ export function CardProvider({ children }) {
   return (
     <CardContext.Provider value={{
       collection,
-      addToCollection,
+      addCardToCollection,
       removeFromCollection
     }}>
       {children}

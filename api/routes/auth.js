@@ -8,27 +8,30 @@ module.exports = (knex) => {
   const router = express.Router();
 
   // Register
-  router.post('/register', async (req, res) => {
-    const { username, password } = req.body;
-    if (!username || !password) {
-      return res.status(400).json({ error: 'Username and password required' });
+router.post('/register', async (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    return res.status(400).json({ error: 'Username and password required' });
+  }
+  try {
+    const exists = await knex('users').where({ username }).first();
+    console.log("User exists?", exists);
+    if (exists) {
+      return res.status(409).json({ error: 'Username already taken' });
     }
-    try {
-      const exists = await knex('users').where({ username }).first();
-      if (exists) {
-        return res.status(409).json({ error: 'Username already taken' });
-      }
-      const password_hash = await bcrypt.hash(password, 10);
-      const [user] = await knex('users')
-        .insert({ username, password_hash })
-        .returning(['id', 'username']);
-      const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
-      res.json({ token, user: { id: user.id, username: user.username } });
-    } catch (e) {
-      console.error('Register error', e);
-      res.status(500).json({ error: 'Registration failed' });
-    }
-  });
+    const password_hash = await bcrypt.hash(password, 10);
+    console.log("Password hash:", password_hash);
+    const [user] = await knex('users')
+      .insert({ username, password_hash })
+      .returning(['id', 'username']);
+    console.log("Inserted user:", user);
+    const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
+    res.json({ token, user: { id: user.id, username: user.username } });
+  } catch (e) {
+    console.error('Register error', e);
+    res.status(500).json({ error: 'Registration failed' });
+  }
+});
 
   // Login
   router.post('/login', async (req, res) => {

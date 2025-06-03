@@ -1,40 +1,19 @@
 const express = require('express');
+const Collection = require('../models/Collection');
+const makeCollectionController = require('../controllers/collectionController');
 
 module.exports = (knex) => {
-  const router = require('express').Router();
+  const router = express.Router();
 
-  // GET /api/collection
-  router.get('/', async (req, res) => {
-    const userId = req.user.id;
-    const cards = await knex('collections').where({ user_id: userId });
-    res.json(cards);
-  });
+  // Instantiate model and controller
+  const collectionModel = new Collection(knex);
+  const collectionController = makeCollectionController(collectionModel);
 
-  // POST /api/collection
-  router.post('/', async (req, res) => {
-    const userId = req.user.id;
-    const { card_id } = req.body;
-    const existing = await knex('collections').where({ user_id: userId, card_id }).first();
-    if (existing) {
-      await knex('collections').where({ id: existing.id }).update({ count: existing.count + 1 });
-    } else {
-      await knex('collections').insert({ user_id: userId, card_id, count: 1 });
-    }
-    res.json({ success: true });
-  });
-
-  // DELETE /api/collection
-  router.delete('/', async (req, res) => {
-    const userId = req.user.id;
-    const { card_id } = req.body;
-    const existing = await knex('collections').where({ user_id: userId, card_id }).first();
-    if (existing && existing.count > 1) {
-      await knex('collections').where({ id: existing.id }).update({ count: existing.count - 1 });
-    } else if (existing) {
-      await knex('collections').where({ id: existing.id }).del();
-    }
-    res.json({ success: true });
-  });
+  // Route definitions
+  router.get('/', collectionController.getCollection);
+  router.post('/', collectionController.addCard);
+  // Use DELETE /:cardId for RESTful API
+  router.delete('/:cardId', collectionController.removeCard);
 
   return router;
 };

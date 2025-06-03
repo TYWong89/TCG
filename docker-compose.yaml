@@ -28,7 +28,7 @@ services:
   ui:
     build: ./ui
     ports:
-      - "5173:5173"
+      - "5173:5174"
     environment:
       VITE_API_URL: http://localhost:3001
     depends_on:

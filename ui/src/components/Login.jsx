@@ -36,12 +36,14 @@ export default function Login() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Username"
+          autoComplete="username"
         /><br />
         <input
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           type="password"
           placeholder="Password"
+          autoComplete="current-password"
         /><br />
         <button type="submit">Login</button>
         <button type="button" onClick={() => setPage("register")}>
