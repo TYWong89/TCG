@@ -2,44 +2,44 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../AuthContext";
 import { useCardContext } from "./CardContext";
 
-// Helper to build correct image URL
-function getCardImageUrl(card) {
-  let imageFilename =
-    card.result_editions?.[0]?.image ||
-    card.editions?.[0]?.image ||
-    card.image ||
-    card.image_name ||
+function getCardImageUrl(cardData) {
+  let image =
+    cardData.result_editions?.[0]?.image ||
+    cardData.editions?.[0]?.image ||
+    cardData.image ||
+    cardData.image_name ||
     null;
-
-  if (!imageFilename) return null;
-  if (imageFilename.startsWith("http")) return imageFilename;
-  if (imageFilename.startsWith("/")) return `https://api.gatcg.com${imageFilename}`;
-  return `https://api.gatcg.com/cards/images/${imageFilename}`;
+  if (image && !image.startsWith("http")) {
+    if (image.startsWith("/")) return `https://api.gatcg.com${image}`;
+    else return `https://api.gatcg.com/cards/images/${image}`;
+  }
+  return image || null;
 }
 
-// Standardize card structure
-function processCardData(card) {
+function processCardData(cardData) {
   return {
-    id: card.slug || card.id || card.uuid || card.cardId || "",
-    name: card.name || card.title || "",
-    description: card.description || card.text || card.effect || "",
-    type: card.type || card.cardType || (card.types ? card.types.join(", ") : ""),
-    rarity: card.rarity || card.editions?.[0]?.rarity || "",
-    imageUrl: getCardImageUrl(card),
-    attack: card.attack || card.atk || null,
-    defense: card.defense || card.def || null,
-    cost: card.cost || card.cost_memory || card.mana || null,
-    originalData: card,
+    id: cardData.slug || cardData.id || cardData.uuid || cardData.cardId || "",
+    name: cardData.name || cardData.title || "",
+    description: cardData.description || cardData.text || cardData.effect || "",
+    type: cardData.type || cardData.cardType || (cardData.types ? cardData.types.join(", ") : ""),
+    rarity: cardData.rarity || cardData.editions?.[0]?.rarity || "",
+    imageUrl: getCardImageUrl(cardData),
+    attack: cardData.attack || cardData.atk || null,
+    defense: cardData.defense || cardData.def || null,
+    cost: cardData.cost || cardData.cost_memory || cardData.mana || null,
+    originalData: cardData,
   };
 }
 
 export default function CardSearch() {
   const { user } = useContext(AuthContext);
-  const { addCardToCollection } = useCardContext(); // <- from context ONLY!
+  const { addCardToCollection } = useCardContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [notification, setNotification] = useState("");
+
 
   async function fetchCards(term) {
     setLoading(true);
@@ -56,7 +56,19 @@ export default function CardSearch() {
         data.results ||
         data.data ||
         [];
-      const processed = cardsArr.map(processCardData);
+
+      // Now, fetch the full card details for each result
+      const detailedPromises = cardsArr.map(async (card) => {
+        // Try by slug, fallback to uuid if present
+        const cardId = card.slug || card.uuid || card.id || card.cardId;
+        if (!cardId) return null;
+        const detailRes = await fetch(`https://api.gatcg.com/cards/${cardId}`);
+        if (!detailRes.ok) return null;
+        const detailData = await detailRes.json();
+        return processCardData(detailData);
+      });
+
+      const processed = (await Promise.all(detailedPromises)).filter(Boolean);
       setCards(processed);
     } catch (err) {
       setError("Error fetching cards");
@@ -71,10 +83,31 @@ export default function CardSearch() {
     if (searchTerm.trim() === "") return;
     fetchCards(searchTerm.trim());
   }
+   function handleAddToCollection(card) {
+    addCardToCollection(card);
+    setNotification(`${card.name} added to your collection!`);
+    setTimeout(() => setNotification(""), 1800);
+  }
 
   return (
     <section>
       <h2>Card Search</h2>
+      {notification && (
+      <div
+        style={{
+          background: "#333",
+          color: "#ffe600",
+          padding: "0.75em",
+          borderRadius: 8,
+          marginBottom: 12,
+          textAlign: "center",
+          fontWeight: "bold",
+          boxShadow: "0 4px 16px #0007"
+        }}
+      >
+        {notification}
+      </div>
+      )}
       <form onSubmit={handleSearch} style={{ marginBottom: "1rem" }}>
         <input
           value={searchTerm}
@@ -124,11 +157,8 @@ export default function CardSearch() {
             </div>
             <div>
               <button
-                style={{ marginTop: 8 }}
-                onClick={() => {
-                  console.log("Adding card to collection", card);
-                  addCardToCollection(card);
-                }}
+                style={{ marginTop: 4 }}
+                onClick={() => handleAddToCollection(card)}
                 disabled={!user}
               >
                 Add to Collection

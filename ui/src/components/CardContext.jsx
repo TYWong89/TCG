@@ -45,7 +45,7 @@ export function CardProvider({ children }) {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
-      .then(data => setCollection(data));
+      .then(data => setCollection(data.collection || []));
   }
 
   // Remove from collection
