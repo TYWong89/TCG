@@ -10,10 +10,10 @@ module.exports = {
       database : process.env.DB_NAME || 'carddeck'
     },
     migrations: {
-      directory: './api/migrations'
+      directory: './migrations'
     },
     seeds: {
-      directory: './api/seeds'
+      directory: './seeds'
     }
   }
 };

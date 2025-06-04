@@ -60,7 +60,6 @@ export default function Collection() {
     fetchCardDetails();
   }, [collection]);
 
-  // Handlers
   const handleAdd = (card_id) => {
     const card = { id: card_id };
     addCardToCollection(card);
@@ -69,11 +68,10 @@ export default function Collection() {
     removeFromCollection(card_id);
   };
   const handleDecrease = (card_id) => {
-    // Remove if count is 1, otherwise backend should decrease count (see backend note below)
+  
     removeFromCollection(card_id);
   };
 
-  // Render
   return (
     <div style={{ display: "flex", flexWrap: "wrap", gap: 24 }}>
       {Object.values(detailedCards).map((card) => (

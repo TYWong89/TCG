@@ -9,7 +9,6 @@ export default function DeckBuilder() {
   const [deckName, setDeckName] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Use API helper for fetching decks
   async function loadDecks() {
     setLoading(true);
     const data = await apiFetchDecks();
@@ -17,7 +16,6 @@ export default function DeckBuilder() {
     setLoading(false);
   }
 
-  // Use API helper for creating deck
   async function handleCreateDeck(e) {
     e.preventDefault();
     if (!deckName.trim()) return;
@@ -26,7 +24,6 @@ export default function DeckBuilder() {
     loadDecks();
   }
 
-  // Use API helper for deleting deck
   async function handleDeleteDeck(deckId) {
     await apiDeleteDeck(deckId);
     setSelectedDeck(null);
@@ -39,7 +36,6 @@ export default function DeckBuilder() {
 
   useEffect(() => {
     loadDecks();
-    // eslint-disable-next-line
   }, []);
 
   return (

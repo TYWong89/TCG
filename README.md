@@ -20,7 +20,7 @@ Track and manage your personal card collection
 RESTful backend with PostgreSQL database
 
 ### Project Structure
-GATCG-Deck-Builder/
+TCG/
 ├── api/          # Express backend API
 │   ├── controllers/
 │   ├── migrations/

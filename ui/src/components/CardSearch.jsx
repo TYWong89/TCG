@@ -57,9 +57,7 @@ export default function CardSearch() {
         data.data ||
         [];
 
-      // Now, fetch the full card details for each result
       const detailedPromises = cardsArr.map(async (card) => {
-        // Try by slug, fallback to uuid if present
         const cardId = card.slug || card.uuid || card.id || card.cardId;
         if (!cardId) return null;
         const detailRes = await fetch(`https://api.gatcg.com/cards/${cardId}`);

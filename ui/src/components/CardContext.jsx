@@ -8,7 +8,6 @@ export function CardProvider({ children }) {
   const { user, token } = useContext(AuthContext);
 
   const [collection, setCollection] = useState([]);
-  // (Add deck state as needed)
 
   // Load from backend when user logs in/changes
   useEffect(() => {

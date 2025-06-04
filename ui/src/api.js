@@ -95,7 +95,6 @@ export async function deleteDeck(deckId) {
   return res.json();
 }
 
-// Example: search GATCG API for cards
 export async function searchCards(term) {
   const res = await fetch(
     `https://api.gatcg.com/cards/autocomplete?name=${encodeURIComponent(term)}`
