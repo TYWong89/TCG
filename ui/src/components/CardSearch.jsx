@@ -20,7 +20,7 @@ function getCardImageUrl(card) {
 // Standardize card structure
 function processCardData(card) {
   return {
-    id: card.id || card.uuid || card.cardId || "",
+    id: card.slug || card.id || card.uuid || card.cardId || "",
     name: card.name || card.title || "",
     description: card.description || card.text || card.effect || "",
     type: card.type || card.cardType || (card.types ? card.types.join(", ") : ""),
@@ -125,7 +125,10 @@ export default function CardSearch() {
             <div>
               <button
                 style={{ marginTop: 8 }}
-                onClick={() => addCardToCollection(card)}
+                onClick={() => {
+                  console.log("Adding card to collection", card);
+                  addCardToCollection(card);
+                }}
                 disabled={!user}
               >
                 Add to Collection

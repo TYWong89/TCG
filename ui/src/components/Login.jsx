@@ -2,7 +2,8 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../AuthContext";
 
 export default function Login() {
-  const { setUser, setPage } = useContext(AuthContext);
+  const { setUser, setPage, setToken} = useContext(AuthContext);
+  
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -19,6 +20,7 @@ export default function Login() {
         if (data.token) {
           localStorage.setItem("token", data.token);
           setUser(data.user);
+          setToken(data.token);
           setError(null);
         } else {
           setError(data.error || "Login failed");

@@ -20,13 +20,18 @@ export function CardProvider({ children }) {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
-      .then(data => setCollection(data))
+      .then(data => setCollection(data.collection || []))
       .catch(() => setCollection([]));
   }, [user, token]);
 
   // Add to collection
   async function addCardToCollection(card) {
-    if (!token) return;
+    console.log("user", user, "token", token);
+    if (!token) {
+    console.log("No token, aborting");  
+    return;
+    }
+    console.log("Fetching to /api/collection");    
     await fetch("/api/collection", {
       method: "POST",
       headers: {
@@ -46,19 +51,17 @@ export function CardProvider({ children }) {
   // Remove from collection
   async function removeFromCollection(cardId) {
     if (!token) return;
-    await fetch("/api/collection", {
+    await fetch(`/api/collection/${cardId}`, {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({ card_id: cardId })
+      }
     });
     fetch("/api/collection", {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
-      .then(data => setCollection(data));
+      .then(data => setCollection(data.collection || []));
   }
 
   return (

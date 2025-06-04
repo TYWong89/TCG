@@ -1,18 +1,18 @@
 const express = require('express');
 const Collection = require('../models/Collection');
 const makeCollectionController = require('../controllers/collectionController');
+const authenticate = require('../middleware/auth');
 
 module.exports = (knex) => {
   const router = express.Router();
 
-  // Instantiate model and controller
   const collectionModel = new Collection(knex);
   const collectionController = makeCollectionController(collectionModel);
 
-  // Route definitions
+  router.use(authenticate);
+
   router.get('/', collectionController.getCollection);
   router.post('/', collectionController.addCard);
-  // Use DELETE /:cardId for RESTful API
   router.delete('/:cardId', collectionController.removeCard);
 
   return router;

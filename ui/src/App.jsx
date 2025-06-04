@@ -39,7 +39,7 @@ export default function Root() {
   return (
     <AuthProvider>
       <CardProvider>
-        <CardSearch />
+        {/* <CardSearch /> */}
         <App />
       </CardProvider>
     </AuthProvider>
