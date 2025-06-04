@@ -46,8 +46,8 @@ PostgreSQL (local or remote instance)
 ### Quick Start
 1. Clone the Repo
 
-`git clone` https://github.com/YOUR_USERNAME/GATCG-Deck-Builder.git
-cd GATCG-Deck-Builder
+`git clone` https://github.com/TYWong89/TCG.git
+cd TCG
 
 2. ** Set Up the Backend (/api) ** 
 

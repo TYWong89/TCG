@@ -1,9 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const knex = require('knex')(require('../knexfile').development);
+const knex = require('./db/knex'); 
 
-const authenticate = require('./middleware/authenticate');
+const authenticate = require('./middleware/auth');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(authenticate);
+
 
 // Routes
 app.use('/api/auth', require('./routes/auth')(knex));
