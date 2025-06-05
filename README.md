@@ -22,6 +22,7 @@ Track and manage your personal card collection
 RESTful backend with PostgreSQL database
 
 ### Project Structure
+``` bash
 TCG/
 woh/
 ├─ api/
@@ -88,6 +89,7 @@ woh/
 ├─ package-lock.json
 ├─ package.json
 └─ README.md
+```
 
 ### Prerequisites
 Node.js (v18 or higher recommended)
@@ -183,19 +185,19 @@ PORT=3001
 JWT_SECRET=your-very-secret-key
 DATABASE_URL=postgres://username:password@localhost:5432/TCG
 
-##HOW TO USE THE APP
-Select a username to log-in
+## HOW TO USE THE APP
+- Select a username to log-in
 Or click register and register your own account!
 
-Once logged in, you can begin searching for cards to add to your collection.
+- Once logged in, you can begin searching for cards to add to your collection.
 (You can search for: Grand Crusader's Ring, Lost in Thought, Fractal of Polar Depths, or any cards currently available up to Mercurial Heart Alter Edition)
 
-Have more than one card in collections? No problem! Head over to the collection tab and increase or decrease quantity!
+- Have more than one card in collections? No problem! Head over to the collection tab and increase or decrease quantity!
 Traded or sold your cards? Hit that remove button.
 
-Cards in collection are saved by user id
+- Cards in collection are saved by user id
 
-Happy collecting!
+- Happy collecting!
 
 ### Troubleshooting
 
