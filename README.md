@@ -1,6 +1,8 @@
-# GATCG Deck Builder
-## Welcome to the Grand Archive TCG card search, deckbuilder and collector application!
-### A fullstack application for Grand Archive TCG card browsing, collection management, and deck building.
+# GATCG
+## Welcome to the Grand Archive TCG card search, and collector application!
+### A fullstack application for Grand Archive TCG card browsing, and collection management.
+
+Demo log-ins are located in api/seeds/01_users.js
 
 ** Frontend: ** React + Vite (/ui)
 
@@ -13,7 +15,7 @@ User authentication (register/login with JWT)
 
 Browse and search the full GATCG card database
 
-Build, save, and manage custom decks
+Build, save, and manage custom decks(Future plan)
 
 Track and manage your personal card collection
 
@@ -21,20 +23,71 @@ RESTful backend with PostgreSQL database
 
 ### Project Structure
 TCG/
-├── api/          # Express backend API
-│   ├── controllers/
-│   ├── migrations/
-│   ├── models/
-│   ├── routes/
-│   ├── index.js
-│   └── ...etc.
-├── ui/           # React + Vite frontend
-│   ├── src/
-│   ├── public/
-│   ├── App.jsx
-│   └── ...etc.
-├── docker-compose.yaml (optional, if Dockerized)
-└── README.md
+woh/
+├─ api/
+│  ├─ controllers/
+│  │  ├─ authController.js
+│  │  ├─ collectionController.js
+│  │  └─ deckController.js
+│  ├─ db/
+│  │  └─ knex.js
+│  ├─ middleware/
+│  │  └─ auth.js
+│  ├─ migrations/
+│  │  ├─ 001_create_users.js
+│  │  ├─ 002_create_collections.js
+│  │  ├─ 003_create_deck.js
+│  │  └─ 004_create_deck_cards.js
+│  ├─ models/
+│  │  ├─ Collection.js
+│  │  ├─ Deck.js
+│  │  └─ User.js
+│  ├─ routes/
+│  │  ├─ auth.js
+│  │  ├─ collection.js
+│  │  └─ decks.js
+│  ├─ seeds/
+│  │  ├─ 01_users.js
+│  │  ├─ 02_collections.js
+│  │  ├─ 03_decks.js
+│  │  └─ 04_deck_cards.js
+│  ├─ Dockerfile
+│  ├─ index.js
+│  ├─ knexfile.js
+│  ├─ package-lock.json
+│  └─ package.json
+├─ public/
+├─ ui/
+│  ├─ public/
+│  │  └─ card-back.png
+│  ├─ src/
+│  │  ├─ components/
+│  │  │  ├─ CardContext.jsx
+│  │  │  ├─ CardSearch.jsx
+│  │  │  ├─ Collection.jsx
+│  │  │  ├─ DeckBuilder.jsx
+│  │  │  ├─ Header.jsx
+│  │  │  ├─ Login.jsx
+│  │  │  └─ Register.jsx
+│  │  ├─ api.js
+│  │  ├─ App.css
+│  │  ├─ App.jsx
+│  │  ├─ AuthContext.jsx
+│  │  ├─ index.css
+│  │  └─ main.jsx
+│  ├─ Dockerfile
+│  ├─ index.html
+│  ├─ package-lock.json
+│  ├─ package.json
+│  └─ vite.config.js
+├─ .dockerignore
+├─ .gitignore
+├─ docker-compose.yaml
+├─ eslint.config.js
+├─ knexfile.js
+├─ package-lock.json
+├─ package.json
+└─ README.md
 
 ### Prerequisites
 Node.js (v18 or higher recommended)
@@ -73,8 +126,7 @@ npm run seed        # (If you have seeds)
 ** Start the backend server **
 ```
 npm run dev         # For development (nodemon)
-# or
-npm start           # For production
+
 ```
 3.** Set Up the Frontend (/ui) ** 
 Open a new terminal:
@@ -118,7 +170,7 @@ In the root folder, run:
 ```
 docker-compose up --build
 ```
-Developer Notes
+Dev Notes
 Backend routes: All API endpoints start with /api/... (see /api/routes).
 
 Frontend API calls: See /ui/src/api.js.
@@ -132,6 +184,7 @@ JWT_SECRET=your-very-secret-key
 DATABASE_URL=postgres://username:password@localhost:5432/gatcg_deckbuilder
 
 ### Troubleshooting
+
 **Frontend API calls get 404?**
 
 Make sure your backend is running.
